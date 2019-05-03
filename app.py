@@ -1,4 +1,11 @@
 from flask import Flask, jsonify, request
+
+import pickle
+import numpy as np
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.externals import joblib
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -16,6 +23,7 @@ def hello():
 def pred_well():
     if request.method == 'POST':
         reqjson = request.get_json()
+        print(reqjson)
         return jsonify({"m":"ijk"})
     else:
         return jsonify({"well":"a single comma separated value"})
@@ -37,4 +45,7 @@ def pred_well_csv():
         return jsonify({"wells":"csv file"})
 
 if __name__  == "__main__":
-    app.run(debug=True, port=8080)
+    model = pickle.load(open("forecasting_model.pkl", "rb"))
+    print(model)
+
+    app.run(debug=True, host='0.0.0.0', port=8080)
