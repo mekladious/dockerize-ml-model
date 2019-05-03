@@ -1,5 +1,6 @@
 # Dockerize ML Model
 
+How to build and run the image
 ```
 docker build -t pred_app:latest .
 docker run -d -p 8080:8080 pred_app
