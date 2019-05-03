@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 
 import pickle
 import numpy as np
@@ -6,6 +6,8 @@ import pandas as pd
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
+
+import csv
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -51,10 +53,18 @@ def pred_well_arr():
 def pred_well_csv():
     if request.method == 'POST':
         reqDf = pd.read_csv(request.files['file'],low_memory=False)
-        # print(reqDf.head())
+        print(reqDf.head())
         y_pred = model.predict(reqDf)
         pred_dict = dict(zip(reqDf['API'] , y_pred.tolist()))
-        return jsonify({"y_pred":pred_dict})
+        rows = zip(reqDf['API'] , y_pred.tolist())
+        
+        with open('predictions.csv', "w") as f:
+            writer = csv.writer(f)
+            writer.writerow(['Id', 'Predicted'])
+            for row in rows:
+                writer.writerow(row)
+
+        return  send_file('predictions.csv')
     else:
         return jsonify({"file":"csv file"})
 
