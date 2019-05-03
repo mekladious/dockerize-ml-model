@@ -1,13 +1,19 @@
-FROM ubuntu:18.10
-LABEL maintainer="Mira Ekladious <miraekladious@gmail.com>"
+FROM ubuntu:latest
+MAINTAINER Mira Ekladious "miraekladious@gmail.com"
 
-RUN apt-get update
-RUN apt-get install -y python3 python3-dev python3-pip nginx
-RUN pip3 install uwsgi
+RUN apt-get update -y
+RUN apt-get install -y python3-pip python3-dev build-essential
+# RUN apt-get install python3.6
 
-COPY ./ ./app
-WORKDIR ./app
+# Add source files
+COPY . /app
+
+ENV HOME=/app
+WORKDIR /app
 
 RUN pip3 install -r requirements.txt
 
-COPY ./nginx.conf /etc/nginx/sites-enabled/default
+EXPOSE 8080
+
+ENTRYPOINT [ "python3" ]
+CMD [ "app.py" ]
