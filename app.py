@@ -2,11 +2,13 @@ from flask import Flask, jsonify, request
 
 import pickle
 import numpy as np
+import pandas as pd
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
 
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
 @app.route("/")
 def hello():
@@ -23,26 +25,38 @@ def hello():
 def pred_well():
     if request.method == 'POST':
         reqjson = request.get_json()
-        print(reqjson)
-        return jsonify({"m":"ijk"})
+        reqDf = pd.DataFrame(reqjson, index=[0])
+        reqDf.insert(loc=0, column='API', value=['1'])
+        y_pred = model.predict(reqDf)
+        return jsonify({"y_pred":y_pred.tolist()[0]})
     else:
-        return jsonify({"well":"a single comma separated value"})
+        return jsonify({
+        "Liquid_x":"MonthIdx 1 Liquid", "Water_x":"MonthIdx 1 Water","DaysOn_x":"MonthIdx 1 DaysOn","Liquid_y":"MonthIdx 2 Liquid","Water_y":"MonthIdx 2 Water","DaysOn_y":"MonthIdx 2 DaysOn","Liquid":"MonthIdx 3 Liquid","Water":"MonthIdx 3 Water","DaysOn":"MonthIdx 3 DaysOn","LATERAL_LENGTH_BLEND":"Well's LATERAL_LENGTH_BLEND"
+        })
 
-@app.route("/pred_well_arr")
+@app.route("/pred_well_arr", methods=['GET', 'POST'])
 def pred_well_arr():
     if request.method == 'POST':
         reqjson = request.get_json()
-        return jsonify({"m":"ijk"})
+        reqDf = pd.DataFrame(reqjson)
+        y_pred = model.predict(reqDf)
+        pred_dict = dict(zip(reqDf['API'] , y_pred.tolist()))
+        return jsonify({"y_pred":pred_dict})
     else:
-        return jsonify({"wells":"[]"})
+        return jsonify({         
+        "API":"[Well's AP]I","Liquid_x":"[MonthIdx 1 Liquid]", "Water_x":"[MonthIdx 1 Water]","DaysOn_x":"[MonthIdx 1 DaysOn]","Liquid_y":"[MonthIdx 2 Liquid]","Water_y":"[MonthIdx 2 Water]","DaysOn_y":"[MonthIdx 2 DaysOn]","Liquid":"[MonthIdx 3 Liquid]","Water":"[MonthIdx 3 Water]","DaysOn":"[MonthIdx 3 DaysOn]","LATERAL_LENGTH_BLEND":"[Well's LATERAL_LENGTH_BLEND]"
+        })
 
-@app.route("/pred_well_csv")
+@app.route("/pred_well_csv", methods=['GET', 'POST'])
 def pred_well_csv():
     if request.method == 'POST':
-        reqjson = request.get_json()
-        return jsonify({"m":"ijk"})
+        reqDf = pd.read_csv(request.files['file'],low_memory=False)
+        # print(reqDf.head())
+        y_pred = model.predict(reqDf)
+        pred_dict = dict(zip(reqDf['API'] , y_pred.tolist()))
+        return jsonify({"y_pred":pred_dict})
     else:
-        return jsonify({"wells":"csv file"})
+        return jsonify({"file":"csv file"})
 
 if __name__  == "__main__":
     model = pickle.load(open("forecasting_model.pkl", "rb"))
