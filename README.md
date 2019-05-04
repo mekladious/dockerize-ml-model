@@ -1,5 +1,7 @@
 # Dockerize ML Model
 
+A more updated app with simple ui is on simple-ui branch 
+
 Hosted image:
 http://ec2-54-154-230-55.eu-west-1.compute.amazonaws.com:8080/
 
