@@ -1,5 +1,8 @@
 # Dockerize ML Model
 
+Hosted image:
+http://ec2-54-154-230-55.eu-west-1.compute.amazonaws.com:8080/
+
 How to build and run the image
 ```
 docker build -t pred_app:latest .
