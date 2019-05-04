@@ -46,7 +46,7 @@ def pred_well_arr():
         return jsonify({"y_pred":pred_dict})
     else:
         return jsonify({         
-        "API":"[Well's AP]I","Liquid_x":"[MonthIdx 1 Liquid]", "Water_x":"[MonthIdx 1 Water]","DaysOn_x":"[MonthIdx 1 DaysOn]","Liquid_y":"[MonthIdx 2 Liquid]","Water_y":"[MonthIdx 2 Water]","DaysOn_y":"[MonthIdx 2 DaysOn]","Liquid":"[MonthIdx 3 Liquid]","Water":"[MonthIdx 3 Water]","DaysOn":"[MonthIdx 3 DaysOn]","LATERAL_LENGTH_BLEND":"[Well's LATERAL_LENGTH_BLEND]"
+        "API":"[Well's API]","Liquid_x":"[MonthIdx 1 Liquid]", "Water_x":"[MonthIdx 1 Water]","DaysOn_x":"[MonthIdx 1 DaysOn]","Liquid_y":"[MonthIdx 2 Liquid]","Water_y":"[MonthIdx 2 Water]","DaysOn_y":"[MonthIdx 2 DaysOn]","Liquid":"[MonthIdx 3 Liquid]","Water":"[MonthIdx 3 Water]","DaysOn":"[MonthIdx 3 DaysOn]","LATERAL_LENGTH_BLEND":"[Well's LATERAL_LENGTH_BLEND]"
         })
 
 @app.route("/pred_well_csv", methods=['GET', 'POST'])
