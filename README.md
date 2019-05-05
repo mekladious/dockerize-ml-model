@@ -5,8 +5,8 @@ A more updated app with simple ui is on simple-ui branch
 Hosted image:
 http://ec2-54-154-230-55.eu-west-1.compute.amazonaws.com:8080/
 
-.tar file:
-https://drive.google.com/open?id=1GecOt-fEgKeY6lBPplPm50wWpgfKoYlZ
+Dockerhub (simple-ui):
+mekladious/pred_app
 
 How to build and run the image
 ```
